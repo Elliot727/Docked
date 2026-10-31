@@ -1,0 +1,15 @@
+{
+  "originHash" : "6277168bf5c9afca7337e0fb7cd6a12ea6eae9b49737de67804c14d59c49bc42",
+  "pins" : [
+    {
+      "identity" : "networkkit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Elliot727/NetworkKit",
+      "state" : {
+        "revision" : "859bcc9eea901b02eed261db3c6fb5f534d56f1f",
+        "version" : "1.3.0"
+      }
+    }
+  ],
+  "version" : 3
+}
