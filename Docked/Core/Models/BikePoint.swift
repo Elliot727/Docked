@@ -61,6 +61,12 @@ extension BikePoint {
         let dockLocation = CLLocation(latitude: lat, longitude: lon)
         return userLocation.distance(from: dockLocation) // metres
     }
+    
+    var shortName: String {
+        commonName.split(separator: ",", maxSplits: 1)
+            .first
+            .map({$0.trimmingCharacters(in: .whitespaces)}) ?? commonName
+    }
 }
 
 struct AdditionalProperty: Codable {

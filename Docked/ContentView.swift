@@ -5,16 +5,30 @@ struct ContentView: View {
     var body: some View {
         AsyncContentView(state: bikePointsViewModel.state) { bikes in
             ScrollView {
-                ForEach(bikes) {bike in
-                    Text(bike.commonName)
+                VStack(spacing: 0) {
+                    ForEach(Array(bikes.enumerated()), id: \.element.id) { index, bike in
+                        BikePointCard(
+                            bikePoint: bike,
+                            distance: 120,
+                            position: position(for: index, in: bikes.count)) {
+                                
+                            }
+                    }
                 }
             }
+            .padding([.top, .horizontal])
         } retry: {
             await bikePointsViewModel.fetchAll()
         }
         .task {
             await bikePointsViewModel.fetchAll()
         }
+    }
+    private func position(for index: Int, in count: Int) -> CardPosition {
+        if count == 1 { return .only }
+        if index == 0 { return .top }
+        if index == count - 1 { return .bottom }
+        return .middle
     }
 }
 
