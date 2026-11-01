@@ -47,6 +47,15 @@ struct BikePointCard: View {
             }
         }
         .buttonStyle(.plain)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(bikePoint.shortName)
+        .accessibilityValue(
+            "\(bikePoint.nbStandardBikes ?? 0) standard bikes, " +
+            "\(bikePoint.nbEBikes ?? 0) e-bikes, " +
+            "\(bikePoint.nbEmptyDocks ?? 0) empty docks, " +
+            "\(distance) metres away"
+        )
+        .accessibilityHint("Opens bike point details")
     }
 }
 
