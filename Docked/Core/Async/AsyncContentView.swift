@@ -4,26 +4,35 @@ struct AsyncContentView<Value, Content: View>: View {
     let state: AsyncState<Value>
     let content: (Value) -> Content
     let retry: () async -> Void
-    
-    init(state: AsyncState<Value>, @ViewBuilder content: @escaping (Value) -> Content, retry: @escaping () async -> Void) {
+
+    init(
+        state: AsyncState<Value>,
+        @ViewBuilder content: @escaping (Value) -> Content,
+        retry: @escaping () async -> Void
+    ) {
         self.state = state
         self.content = content
         self.retry = retry
     }
-    
+
     var body: some View {
-        switch state {
-        case .loading(let previous):
-            if let previous {
-                content(previous)
-            }
-            else {
-                ProgressView()
-            }
-        case .loaded(let value):
+        if let value = state.value {
+            // Loaded OR refreshing. One branch, so the ScrollView keeps its identity.
             content(value)
-        case .failed(let error):
-            Text(error.localizedDescription)
+        } else if case .failed(let error) = state {
+            VStack(spacing: Spacing.md) {
+                Text(error.localizedDescription)
+                    .multilineTextAlignment(.center)
+                Button("Try again") {
+                    Task { await retry() }
+                }
+            }
+            .padding()
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+        } else {
+            // First load, nothing to show yet
+            ProgressView()
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
     }
 }

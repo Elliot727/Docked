@@ -9,7 +9,7 @@ struct AppBackground<Content: View>: View {
 
     var body: some View {
         content
-            .background(Color.background)
-            .ignoresSafeArea()
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(Color.background.ignoresSafeArea())
     }
 }
