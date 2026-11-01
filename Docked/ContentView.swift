@@ -3,24 +3,30 @@ import SwiftUI
 struct ContentView: View {
     @Environment(BikePointsViewModel.self) var bikePointsViewModel
     var body: some View {
-        AsyncContentView(state: bikePointsViewModel.state) { bikes in
-            ScrollView {
-                VStack(spacing: 0) {
-                    ForEach(Array(bikes.enumerated()), id: \.element.id) { index, bike in
-                        BikePointCard(
-                            bikePoint: bike,
-                            distance: 120,
-                            position: position(for: index, in: bikes.count)) {
-                                
-                            }
+        AppBackground {
+            AsyncContentView(state: bikePointsViewModel.state) { bikes in
+                ScrollView {
+                    VStack(spacing: 0) {
+                        ForEach(Array(bikes.enumerated()), id: \.element.id) { index, bike in
+                            BikePointCard(
+                                bikePoint: bike,
+                                distance: 120,
+                                position: position(for: index, in: bikes.count)) {
+                                    
+                                }
+                        }
                     }
+                    .padding([.top, .horizontal])
                 }
+
+            } retry: {
+                await bikePointsViewModel.fetchAll()
             }
-            .padding([.top, .horizontal])
-        } retry: {
-            await bikePointsViewModel.fetchAll()
         }
         .task {
+            await bikePointsViewModel.fetchAll()
+        }
+        .refreshable {
             await bikePointsViewModel.fetchAll()
         }
     }
